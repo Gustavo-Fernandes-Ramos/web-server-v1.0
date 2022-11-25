@@ -1,12 +1,13 @@
 package server;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
-//@SuppressWarnings("unused")
+@SuppressWarnings("unused")
 public class Server implements IServer, Runnable{
 
 	private int port = 8080;
@@ -18,8 +19,6 @@ public class Server implements IServer, Runnable{
 	private Object monitor = new Object();
 	
 	private ServerSocket socket = null;
-	
-	//private static final String newLine = "\r\n";
 	
 	public Server(boolean isMultiThread) {
 		this.isMultiThread = isMultiThread;
@@ -167,6 +166,7 @@ public class Server implements IServer, Runnable{
 			System.out.println("Incapaz de finalizar o socket");
 		}
 	}
+	
 }
 
 

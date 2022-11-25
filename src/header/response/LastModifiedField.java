@@ -31,11 +31,6 @@ public class LastModifiedField extends HeaderField{
         
         return formatter.format(this.date);
     }
-	
-	public static void main(String args[]) {
-		LastModifiedField lmf = new LastModifiedField("Last-Modified", 1323333334);
-		System.out.println(lmf.formatDate());
-	}
 
 	@Override
 	public String convertToString() {
@@ -44,5 +39,11 @@ public class LastModifiedField extends HeaderField{
 
 	@Override
 	public void convertToClass(String strClass) { }
+	
+	
+	public static void main(String args[]) {
+		LastModifiedField lmf = new LastModifiedField("Last-Modified", 1323333334);
+		System.out.println(lmf.formatDate());
+	}
 
 }

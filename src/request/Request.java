@@ -1,5 +1,6 @@
 package request;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import header.HeaderField;
@@ -14,12 +15,28 @@ public class Request {
 	
 	private String body;
 	
+	public Request(String method, String uRL, String version) {
+		super();
+		this.method = method;
+		this.URL = uRL;
+		this.version = version;
+		this.headerFields = new HashMap<String, HeaderField>();
+	}
+	
 	public Request(String method, String uRL, String version, HashMap<String, HeaderField> headerFields, String body) {
 		super();
 		this.method = method;
 		this.URL = uRL;
 		this.version = version;
 		this.headerFields = headerFields;
+		this.body = body;
+	}
+	
+	public String getBody() {
+		return body;
+	}
+
+	public void setBody(String body) {
 		this.body = body;
 	}
 
