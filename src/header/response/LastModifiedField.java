@@ -43,9 +43,6 @@ public class LastModifiedField extends HeaderField{
 	}
 
 	@Override
-	public void convertToClass(String strClass) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void convertToClass(String strClass) { }
 
 }

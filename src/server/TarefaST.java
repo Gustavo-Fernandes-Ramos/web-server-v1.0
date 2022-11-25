@@ -13,6 +13,9 @@ public class TarefaST {
 	}
 	
 	public void executar() {
-		//executarTarefa();
+		executarTarefa();
+	}
+	public void executarTarefa() {
+		System.out.println("chegou mensagem");
 	}
 }

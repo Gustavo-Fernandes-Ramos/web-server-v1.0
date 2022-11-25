@@ -12,8 +12,7 @@ public class TarefaMT extends TarefaST implements Runnable {
 
 	@Override
 	public void run() {
-		// super nao é necessario, esta ai somente para evidenciar!!
-		//super.executarTarefa();
+		super.executarTarefa();
 	}
 	
 	//@Override

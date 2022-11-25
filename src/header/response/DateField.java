@@ -33,13 +33,9 @@ public class DateField extends HeaderField{
 
 	@Override
 	public String convertToString() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getName() + ":" + this.formatDate();
 	}
 
 	@Override
-	public void convertToClass(String strClass) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void convertToClass(String strClass) { }
 }
