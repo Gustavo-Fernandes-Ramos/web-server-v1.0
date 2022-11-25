@@ -115,11 +115,9 @@ public class Server implements IServer, Runnable{
 						if (this.isMultiThread) {
 							TarefaMT tarefaMT = new TarefaMT(this.socket, clientConnection);
 							tarefaMT.executar();
-							System.out.println("usando multithread");
 						} else {
 							TarefaST tarefaST = new TarefaST(this.socket, clientConnection);
 							tarefaST.executar();
-							System.out.println("usando singlethread");
 						}
 					}
 				}
