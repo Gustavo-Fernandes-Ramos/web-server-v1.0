@@ -123,6 +123,8 @@ public class Server implements IServer, Runnable{
 				
 			}catch(InterruptedException e) {
 				e.printStackTrace();
+			}finally {
+				closeSocket();
 			}
 		}
 	}
@@ -137,7 +139,7 @@ public class Server implements IServer, Runnable{
 		} catch (SocketException e) {
 			System.out.println("Ocorreu um SocketException!");
 		} catch (IOException e) {
-			System.out.println("Ocorreu uma IOException!");
+			System.out.println("Ocorreu uma IOException setando o socket!");
 		}
 	}
 	
@@ -149,7 +151,7 @@ public class Server implements IServer, Runnable{
 		} catch(SocketTimeoutException e) {
 			
 		} catch(IOException e) {
-			System.out.println("Ocorreu uma IOException!");
+			System.out.println("Ocorreu uma IOException conectando o socket!");
 		}
 		return connect;
 	}

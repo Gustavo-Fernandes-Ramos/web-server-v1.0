@@ -1,37 +1,77 @@
 package client;
 
-import java.io.BufferedOutputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.awt.Desktop;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class Client {
 	
 	private static final String newLine = "\r\n";
+	private static final String newLineTwice = "\r\n\r\n";
 	
-	public static void main(String[] args) {  
-		try{      
-			Socket s = new Socket("localhost",8080);
+	public static void main(String[] args) { 
+		try{  
+			String host = "localhost";
+			int port = 8080;
+			Socket s = new Socket(host, port);  
 			
-			//BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+			DataOutputStream dout=new DataOutputStream(s.getOutputStream());  
+			DataInputStream din=new DataInputStream(s.getInputStream());  
+			BufferedReader br=new BufferedReader(new InputStreamReader(System.in));  
+			  
+			String answer, url = "", body = "mensagem do body"; 
 			
-			OutputStream out = new BufferedOutputStream(s.getOutputStream());
-			PrintStream pout = new PrintStream(out);
-			/*recursos/pt/BR/html/cachorro.html HTTP/1.0"*/
-			String url = "recursos\\pt\\BR\\html\\cachorro.html";
-			pout.print(
-					"GET" + " " + url + " " + "HTTP/1.0" + newLine + 
-					"User-Agent:" + "Mozilla/4.0" + newLine +
-					"Accept:" + "text/html" + newLine + 
-					"Host:" + "localhost:8080" + newLine + 
-					"Accept-Language:" + "en-US,pt-BR" + newLine + newLine + 
-					"aqui esta o conteudo (body)"
-					);
+			while(!url.equals("stop")){ 
+				System.out.print("digite uma url valida: ");
+				url=br.readLine(); 
+				
+				/*enviando requisicao*/
+				
+				String request =
+						"GET" + " " + url + " " + "HTTP/1.0" + newLine + 
+						"User-Agent:" + "Mozilla/4.0" + newLine +
+						"Accept:" + "text/html" + newLine + 
+						"Host:" + host + ":" + port + newLine + 
+						"Accept-Language:" + "en-US,pt-BR" + newLine + newLine + 
+						body
+						;
+				dout.writeUTF(request); 
+				dout.flush();
+				
+				/*recebendo resposta*/
+				
+				answer=din.readUTF();  
+				System.out.println(answer);
+				
+				if(!url.equals("stop")) {
+					
+					if(Desktop.isDesktopSupported()){
+						File file = new File("page.html");
+						
+						file.createNewFile();
+						
+						FileWriter writer = new FileWriter(file.getAbsolutePath());
+						writer.write(answer.split(newLineTwice)[1]);
+						writer.close();
+						
+					    Desktop desktop = Desktop.getDesktop();
+					    desktop.open(file);
+				    }
+				}
+			}    
+			dout.close();  
+			s.close();  
 			
-			pout.close();
-			s.close(); 
+		}catch(IOException e){
+			System.out.println("Ocorreu uma IOException do lado cliente!");
 		}catch(Exception e){
-			e.printStackTrace();
+			System.out.println("Ocorreu uma Exception do lado cliente!");
 		}
 	}
 }
