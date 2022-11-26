@@ -1,13 +1,11 @@
 package server;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
-@SuppressWarnings("unused")
 public class Server implements IServer, Runnable{
 
 	private int port = 8080;
@@ -149,8 +147,8 @@ public class Server implements IServer, Runnable{
 		try {
 			connect = this.socket.accept();
 		} catch(SocketTimeoutException e) {
-			System.out.println("Cansou de esperar...\"reiniciando\"");
-		}catch (IOException e) {
+			
+		} catch(IOException e) {
 			System.out.println("Ocorreu uma IOException!");
 		}
 		return connect;

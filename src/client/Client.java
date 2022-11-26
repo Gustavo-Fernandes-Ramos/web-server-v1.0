@@ -11,21 +11,27 @@ public class Client {
 	
 	public static void main(String[] args) {  
 		try{      
-			Socket s=new Socket("localhost",8080);  
+			Socket s = new Socket("localhost",8080);
+			
+			//BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+			
 			OutputStream out = new BufferedOutputStream(s.getOutputStream());
 			PrintStream pout = new PrintStream(out);
-			
+			/*recursos/pt/BR/html/cachorro.html HTTP/1.0"*/
+			String url = "recursos\\pt\\BR\\html\\cachorro.html";
 			pout.print(
-					"GET dir/page.html HTTP/1.0" + newLine + 
-					"Content-Type: text/plain" + newLine + 
-					"Date: " + "Fri, 16 Jan 1970 07:35:33 GMT" + newLine + 
-					"Content-length: " + "300" + newLine + newLine + 
+					"GET" + " " + url + " " + "HTTP/1.0" + newLine + 
+					"User-Agent:" + "Mozilla/4.0" + newLine +
+					"Accept:" + "text/html" + newLine + 
+					"Host:" + "localhost:8080" + newLine + 
+					"Accept-Language:" + "en-US,pt-BR" + newLine + newLine + 
 					"aqui esta o conteudo (body)"
 					);
+			
 			pout.close();
-			s.close();  
+			s.close(); 
 		}catch(Exception e){
-			System.out.println(e);  
+			e.printStackTrace();
 		}
 	}
 }

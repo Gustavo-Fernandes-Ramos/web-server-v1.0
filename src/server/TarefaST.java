@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import date.DateFormat;
 import file.SimpleFile;
 
 public class TarefaST {
@@ -28,6 +29,7 @@ public class TarefaST {
 	public void executar() {
 		executarTarefa();
 	}
+	
 	@SuppressWarnings("unused")
 	public void executarTarefa() {
 		try {
@@ -42,7 +44,7 @@ public class TarefaST {
 				return;
 			}
 			
-			String requestLine[] = request.split("\n");
+			String requestLine[] = request.split(" ");
 			
 			String method = requestLine[0];
 			String path = requestLine[1];
@@ -53,35 +55,45 @@ public class TarefaST {
 				return;
 			}
 			
+			String headerName, headerValue;
+			
+			String userAgent = null, host = null;
+			List<String> accept = null, acceptLanguage = null;
+			
 			int index;
+			request = in.readLine();
+			
 			while(request != null && request.length() > 0) {
 				
-				request = in.readLine();
-				index = request.indexOf(':');
+				if((index = request.indexOf(':')) == -1) pout.print("HTTP/1.0 400 Bad Request" + newLine + newLine);
 				
-				String headerName = request.substring(0, index);
-				String headerValue = request.substring(index+1, request.length());
-				
-				String userAgent = null;
-				String host = null;
-				List<String> accept = null;
-				List<String> acceptLanguage = null;
+				headerName = request.substring(0, index);
+				headerValue = request.substring(index+1, request.length());
 				
 				String[] acceptValues, acceptLanguageValues;
 				
 				switch(headerName) {
 				case "User-Agent":
-					if(userAgent != null) return;
+					if(userAgent != null) {
+						pout.print("HTTP/1.0 400 Bad Request" + newLine + newLine);
+						return;
+					}
 					userAgent = headerValue;
 					break;
 					
 				case "Host":
-					if(host != null) return;
+					if(host != null) {
+						pout.print("HTTP/1.0 400 Bad Request" + newLine + newLine);
+						return;
+					}
 					host = headerValue;
 					break;
 					
 				case "Accept":
-					if(accept != null) return;
+					if(accept != null) {
+						pout.print("HTTP/1.0 400 Bad Request" + newLine + newLine);
+						return;
+					}
 					accept = new ArrayList<String>();
 					acceptValues = headerValue.split(",");
 					
@@ -94,7 +106,10 @@ public class TarefaST {
 					break;
 					
 				case "Accept-Language":
-					if(acceptLanguage != null) return;
+					if(acceptLanguage != null) {
+						pout.print("HTTP/1.0 400 Bad Request" + newLine + newLine);
+						return;
+					}
 					acceptLanguage = new ArrayList<String>();
 					acceptLanguageValues = headerValue.split(",");
 					
@@ -109,21 +124,31 @@ public class TarefaST {
 				default:
 					pout.print("HTTP/1.0 400 Bad Request" + newLine + newLine);
 					return;
-				}
+				}//fim do switch
 				
-			}
+				request = in.readLine();
+			} //fim do while
+			
+			
+			
+			
 			SimpleFile f = new SimpleFile(path);
-			f.createFile();
+			
+			if(!f.exists()) {
+				pout.print("HTTP/1.0 404 Not Found" + newLine + newLine);
+				return;
+			}
+			
+			long lastModified = f.lastModified();
 			String response = f.readFile();
-			
-			//--------------------------------------------------------------------------------------
-			
-			Date date = new Date();
-			pout.print(
-					"HTTP/1.0 200 OK" + newLine + 
-					"Content-Type: text/plain" + newLine + 
-					"Date: "+ date + newLine + 
-					"Content-length: " + response.length() + newLine + newLine + 
+
+			/*pout.print*/System.out.println(
+					version + " " + "200 OK" + newLine + 
+					"Date:" + DateFormat.formatDate(new Date()) + newLine + 
+					"Server:" + "Web-Server/v1.0" + newLine + 
+					"Last-Modified:" + DateFormat.formatDate(new Date(lastModified)) + newLine + 
+					"Content-Type:" + accept + newLine + 
+					"Content-length:" + f.length() + newLine + newLine + 
 					response
 					);
 			
